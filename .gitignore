@@ -37,3 +37,5 @@ build/
 
 # Environment / secret files
 .env
+# Local database configuration
+application-local.properties
