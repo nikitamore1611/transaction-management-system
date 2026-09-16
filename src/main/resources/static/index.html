@@ -1,0 +1,1366 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Personal Transaction Management System</title>
+
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+
+    <div class="sidebar-overlay"></div>
+
+    <div class="app-layout">
+
+        <!-- =====================================================
+             SIDEBAR
+             ===================================================== -->
+
+        <aside class="sidebar">
+
+            <div class="sidebar-brand">
+
+                <div class="brand-icon">
+                    ₹
+                </div>
+
+                <div class="brand-text">
+                    <strong>Transaction</strong>
+                    <span>Management</span>
+                </div>
+
+            </div>
+
+            <nav class="sidebar-nav">
+
+                <p class="nav-title">MAIN</p>
+
+                <a href="#dashboard-area" class="nav-item active">
+                    <span class="nav-icon">⌂</span>
+                    <span>Dashboard</span>
+                </a>
+
+                <a href="#transactions-list-area" class="nav-item">
+                    <span class="nav-icon">↔</span>
+                    <span>Transactions</span>
+                </a>
+
+                <a href="#monthly-summary-area" class="nav-item">
+                    <span class="nav-icon">▤</span>
+                    <span>Reports</span>
+                </a>
+
+                <p class="nav-title nav-title-space">ACCOUNT</p>
+
+                <a href="#" class="nav-item" onclick="deleteAccount(); return false;">
+                    <span class="nav-icon">⚙</span>
+                    <span>Delete Account</span>
+                </a>
+
+            </nav>
+
+            <div class="sidebar-bottom">
+
+                <div class="sidebar-user">
+                    <div class="user-avatar" id="sidebarUserAvatar">
+                        U
+                    </div>
+
+                    <div class="user-details">
+                        <strong id="sidebarUserName">User Account</strong>
+                        <span>Personal Account</span>
+                    </div>
+                </div>
+            </div>
+
+        </aside>
+
+
+        <!-- =====================================================
+             MAIN APPLICATION
+             ===================================================== -->
+
+        <main class="main-content">
+
+
+            <!-- =================================================
+                 TOP BAR
+                 ================================================= -->
+
+            <header class="topbar">
+
+                <div class="topbar-left">
+
+                    <button class="mobile-menu-button" type="button">
+                        ☰
+                    </button>
+
+                    <div>
+                        <h1>Dashboard</h1>
+                        <p>Manage and track your personal finances</p>
+                    </div>
+
+                </div>
+
+
+                <div class="topbar-right">
+
+                    <div class="topbar-date">
+                        Personal Finance
+                    </div>
+
+                    <button type="button" onclick="logoutUser()" style="
+                        border: none;
+                        padding: 9px 16px;
+                        border-radius: 8px;
+                        background: #dc2626;
+                        color: white;
+                        font-size: 13px;
+                        font-weight: 700;
+                        cursor: pointer;
+                    ">
+                        Logout
+                    </button>
+
+                    <div class="topbar-avatar" id="topbarUserAvatar">
+                        U
+                    </div>
+                </div>
+
+            </header>
+
+
+            <!-- =================================================
+                 DASHBOARD
+                 ================================================= -->
+
+            <section id="dashboard-area">
+
+
+                <!-- Page heading -->
+
+                <div class="page-heading">
+
+                    <div>
+                        <h2>Financial Overview</h2>
+                        <p>Your current financial summary</p>
+                    </div>
+
+                </div>
+
+
+                <!-- =================================================
+                     BALANCE
+                     ================================================= -->
+
+                <section class="balance-section">
+
+                    <div class="balance-content">
+
+                        <div class="balance-label">
+                            Current Balance
+                        </div>
+
+                        <div id="currentBalance">
+                            ₹0.00
+                        </div>
+
+                        <div class="balance-subtitle">
+                            Available balance
+                        </div>
+
+                    </div>
+
+                </section>
+
+
+                <!-- =================================================
+                     SUMMARY CARDS
+                     ================================================= -->
+
+                <section class="summary-section">
+
+
+                    <div class="summary-card">
+
+                        <div class="summary-card-top">
+
+                            <div>
+                                <h3>Total Credit</h3>
+                                <p id="totalCredit">₹0.00</p>
+                            </div>
+
+                            <div class="summary-icon credit-icon">
+                                ↑
+                            </div>
+
+                        </div>
+
+                        <span class="summary-description">
+                            Total income received
+                        </span>
+
+                    </div>
+
+
+                    <div class="summary-card">
+
+                        <div class="summary-card-top">
+
+                            <div>
+                                <h3>Total Debit</h3>
+                                <p id="totalDebit">₹0.00</p>
+                            </div>
+
+                            <div class="summary-icon debit-icon">
+                                ↓
+                            </div>
+
+                        </div>
+
+                        <span class="summary-description">
+                            Total expenses
+                        </span>
+
+                    </div>
+
+
+                    <div class="summary-card">
+
+                        <div class="summary-card-top">
+
+                            <div>
+                                <h3>Recent Transactions</h3>
+                                <p id="transactionCount">0</p>
+                            </div>
+
+                            <div class="summary-icon transaction-icon">
+                                ↔
+                            </div>
+
+                        </div>
+
+                        <span class="summary-description">
+                            Transactions in selected period
+                        </span>
+
+                    </div>
+
+
+                </section>
+
+
+                <!-- =================================================
+                     ACTION AREA
+                     ================================================= -->
+
+                <section class="dashboard-grid">
+
+
+                    <!-- ADD TRANSACTION -->
+
+                    <section class="transaction-form-section" id="transaction-area">
+
+                        <div class="section-header">
+
+                            <div>
+                                <h2>Add Transaction</h2>
+                                <p>Record a new income or expense</p>
+                            </div>
+
+                            <div class="section-icon">
+                                +
+                            </div>
+
+                        </div>
+
+
+                        <!-- Date -->
+
+                        <div class="form-field">
+
+                            <label for="transactionDate">
+                                Transaction Date
+                            </label>
+
+                            <div class="input-wrapper">
+
+                                <input type="date" id="transactionDate">
+
+                            </div>
+
+                            <span class="field-help">
+                                Select today or a previous date
+                            </span>
+
+                        </div>
+
+
+                        <!-- Type -->
+
+                        <div class="form-field">
+
+                            <label for="transactionType">
+                                Transaction Type
+                            </label>
+
+                            <div class="type-selection">
+
+                                <select id="transactionType">
+
+                                    <option value="">
+                                        Select transaction type
+                                    </option>
+
+                                    <option value="CREDIT">
+                                        Credit — Money received
+                                    </option>
+
+                                    <option value="DEBIT">
+                                        Debit — Money spent
+                                    </option>
+
+                                </select>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- Amount -->
+
+                        <div class="form-field">
+
+                            <label for="transactionAmount">
+                                Amount
+                            </label>
+
+                            <div class="amount-input-wrapper">
+
+                                <span class="currency-symbol">
+                                    ₹
+                                </span>
+
+                                <input type="number" id="transactionAmount" step="0.01" min="0.01" placeholder="0.00">
+
+                            </div>
+
+                            <span class="field-help">
+                                Enter the transaction amount
+                            </span>
+
+                        </div>
+
+
+                        <!-- Reason -->
+
+                        <div class="form-field">
+
+                            <label for="transactionReason">
+                                Reason
+                            </label>
+
+                            <input type="text" id="transactionReason" maxlength="100"
+                                placeholder="e.g. Salary, Food, Shopping">
+
+                            <div class="field-bottom">
+
+                                <span class="field-help">
+                                    Briefly describe this transaction
+                                </span>
+
+                                <span class="character-limit">
+                                    Maximum 100 characters
+                                </span>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- Submit -->
+
+                        <button id="addTransaction" type="button" class="primary-form-button">
+
+                            <span class="button-icon">+</span>
+
+                            Add Transaction
+
+                        </button>
+
+                    </section>
+
+
+                    <!-- DASHBOARD CONTROLS -->
+
+                    <section class="dashboard-controls">
+
+                        <div class="section-header">
+
+                            <div>
+                                <h2>Dashboard Controls</h2>
+                                <p>Select the period for your overview</p>
+                            </div>
+
+                            <div class="section-icon">
+                                ◷
+                            </div>
+
+                        </div>
+
+
+                        <div class="control-field">
+
+                            <label for="period">
+                                Period
+                            </label>
+
+                            <select id="period">
+
+                                <option value="CURRENT_MONTH">
+                                    Current Month
+                                </option>
+
+                                <option value="PREVIOUS_MONTH">
+                                    Previous Month
+                                </option>
+
+                                <option value="CUSTOM">
+                                    Custom Date Range
+                                </option>
+
+                            </select>
+
+                        </div>
+
+
+                        <div id="customDateSection" style="display: none;">
+
+                            <div class="custom-date-grid">
+
+                                <div>
+
+                                    <label for="startDate">
+                                        Start Date
+                                    </label>
+
+                                    <input type="date" id="startDate">
+
+                                </div>
+
+
+                                <div>
+
+                                    <label for="endDate">
+                                        End Date
+                                    </label>
+
+                                    <input type="date" id="endDate">
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="control-actions">
+
+                            <button id="loadDashboard" type="button">
+                                Load Dashboard
+                            </button>
+
+                            <button id="generateReport" type="button">
+                                Generate Report
+                            </button>
+
+                        </div>
+
+                    </section>
+
+
+                </section>
+
+
+                <!-- =================================================
+                     SEARCH AND FILTER
+                     ================================================= -->
+
+                <section class="filter-section">
+
+                    <div class="section-header">
+
+                        <div>
+                            <h2>Search & Filter</h2>
+                            <p>Find and organize your transactions</p>
+                        </div>
+
+                        <div class="section-icon">
+                            ⌕
+                        </div>
+
+                    </div>
+
+
+                    <div class="filter-toolbar">
+
+
+                        <div class="filter-field">
+
+                            <label for="searchReason">
+                                Search Reason
+                            </label>
+
+                            <input type="text" id="searchReason" placeholder="Search transactions">
+
+                        </div>
+
+
+                        <div class="filter-field">
+
+                            <label for="filterType">
+                                Type
+                            </label>
+
+                            <select id="filterType">
+
+                                <option value="">
+                                    All
+                                </option>
+
+                                <option value="CREDIT">
+                                    Credit
+                                </option>
+
+                                <option value="DEBIT">
+                                    Debit
+                                </option>
+
+                            </select>
+
+                        </div>
+
+
+                        <div class="filter-field">
+
+                            <label for="sortOrder">
+                                Sort
+                            </label>
+
+                            <select id="sortOrder">
+
+                                <option value="NEWEST">
+                                    Newest → Oldest
+                                </option>
+
+                                <option value="OLDEST">
+                                    Oldest → Newest
+                                </option>
+
+                            </select>
+
+                        </div>
+
+
+                        <div class="filter-actions">
+
+                            <button id="applyFilters" type="button">
+                                Apply Filters
+                            </button>
+
+                            <button id="clearFilters" type="button">
+                                Clear
+                            </button>
+
+                        </div>
+
+
+                    </div>
+
+                </section>
+
+
+                <!-- =================================================
+                     MONTHLY SUMMARY
+                     ================================================= -->
+
+                <section class="monthly-summary-section" id="monthly-summary-area">
+
+                    <div class="section-header">
+
+                        <div>
+                            <h2>Monthly Financial Summary</h2>
+                            <p>Overview of your monthly financial activity</p>
+                        </div>
+
+                        <div class="section-icon">
+                            ▤
+                        </div>
+
+                    </div>
+
+
+                    <div class="monthly-summary-table-container">
+
+                        <table>
+
+                            <thead>
+
+                                <tr>
+
+                                    <th>Month</th>
+
+                                    <th>Total Credit</th>
+
+                                    <th>Total Debit</th>
+
+                                    <th>Closing Balance</th>
+
+                                </tr>
+
+                            </thead>
+
+
+                            <tbody id="monthlySummaryTableBody">
+
+                                <tr>
+
+                                    <td colspan="4">
+                                        Load Dashboard to view monthly summary.
+                                    </td>
+
+                                </tr>
+
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+                </section>
+
+
+                <!-- =================================================
+                     FINANCIAL ACTIVITY CHART
+                     ================================================= -->
+
+                <section class="financial-chart-section">
+
+                    <div class="section-header">
+
+                        <div>
+                            <h2>Financial Activity</h2>
+                            <p>Monthly credit and debit overview</p>
+                        </div>
+
+                        <div class="section-icon">
+                            ↗
+                        </div>
+
+                    </div>
+
+
+                    <div class="chart-container">
+
+                        <canvas id="financialActivityChart"></canvas>
+
+                    </div>
+
+                </section>
+
+
+                <!-- =================================================
+                     EDIT TRANSACTION
+                     ================================================= -->
+
+                <section class="transaction-form-section" id="editTransactionSection" style="display: none;">
+
+                    <div class="section-header">
+
+                        <div>
+                            <h2>Edit Transaction</h2>
+                            <p>Update transaction information</p>
+                        </div>
+
+                        <div class="section-icon">
+                            ✎
+                        </div>
+
+                    </div>
+
+
+                    <div class="form-field">
+
+                        <label for="editTransactionDate">
+                            Date
+                        </label>
+
+                        <input type="date" id="editTransactionDate">
+
+                    </div>
+
+
+                    <div class="form-field">
+
+                        <label for="editTransactionType">
+                            Transaction Type
+                        </label>
+
+                        <select id="editTransactionType">
+
+                            <option value="">
+                                Select Type
+                            </option>
+
+                            <option value="CREDIT">
+                                Credit
+                            </option>
+
+                            <option value="DEBIT">
+                                Debit
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <div class="form-field">
+
+                        <label for="editTransactionAmount">
+                            Amount
+                        </label>
+
+                        <input type="number" id="editTransactionAmount" step="0.01" min="0.01"
+                            placeholder="Enter amount">
+
+                    </div>
+
+
+                    <div class="form-field">
+
+                        <label for="editTransactionReason">
+                            Reason
+                        </label>
+
+                        <input type="text" id="editTransactionReason" maxlength="100"
+                            placeholder="Enter transaction reason">
+
+                    </div>
+
+
+                    <div class="edit-actions">
+
+                        <button id="updateTransaction">
+                            Update Transaction
+                        </button>
+
+                        <button id="cancelEdit">
+                            Cancel
+                        </button>
+
+                    </div>
+
+                </section>
+
+
+                <!-- =================================================
+                     RECENT TRANSACTIONS
+                     ================================================= -->
+
+                <section class="transactions-section" id="transactions-list-area">
+
+                    <div class="section-header">
+
+                        <div>
+                            <h2>Recent Transactions</h2>
+                            <p>Your latest financial transactions</p>
+                        </div>
+
+                        <div class="transaction-count-label">
+                            Latest Activity
+                        </div>
+
+                    </div>
+
+
+                    <div class="transactions-table-container">
+
+                        <table>
+
+                            <thead>
+
+                                <tr>
+
+                                    <th>Date</th>
+
+                                    <th>Type</th>
+
+                                    <th>Amount</th>
+
+                                    <th>Reason</th>
+
+                                    <th>Balance</th>
+
+                                    <th>Actions</th>
+
+                                </tr>
+
+                            </thead>
+
+
+                            <tbody id="transactionTableBody">
+
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+                </section>
+
+
+            </section>
+
+
+            <!-- =================================================
+                 FOOTER
+                 ================================================= -->
+
+            <footer class="app-footer">
+
+                <span>
+                    Personal Transaction Management System
+                </span>
+
+                <span>
+                    Personal Finance Dashboard
+                </span>
+
+            </footer>
+
+
+        </main>
+
+    </div>
+
+
+    <!-- =========================================================
+         CHART.JS
+         ========================================================= -->
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <script src="js/app.js"></script>
+
+
+    <!-- =========================================================
+         LOGOUT
+         ========================================================= -->
+
+    <script>
+
+        async function logoutUser() {
+
+            try {
+
+                const response = await fetch(
+                    "/api/users/logout",
+                    {
+                        method: "POST"
+                    }
+                );
+
+                if (response.ok) {
+
+                    window.location.href = "/login.html";
+
+                } else {
+
+                    alert("Logout failed.");
+
+                }
+
+            } catch (error) {
+
+                console.error(error);
+
+                alert("Unable to logout.");
+
+            }
+
+        }
+
+    </script>
+
+
+    <!-- =========================================================
+         DELETE ACCOUNT
+         ========================================================= -->
+
+    <script>
+
+        async function deleteAccount() {
+
+            const confirmed = confirm(
+                "WARNING!\n\n" +
+                "Deleting your account will permanently delete:\n" +
+                "• Your personal account\n" +
+                "• All transactions\n" +
+                "• Account recovery records\n" +
+                "• Forgot-password records\n" +
+                "• Password history\n" +
+                "• Related account history\n\n" +
+                "This action cannot be undone.\n\n" +
+                "Are you sure you want to permanently delete your account?"
+            );
+
+            if (!confirmed) {
+                return;
+            }
+
+
+            const finalConfirmation = confirm(
+                "FINAL CONFIRMATION\n\n" +
+                "Your account and all associated data will be permanently deleted.\n\n" +
+                "Click OK to permanently delete your account."
+            );
+
+            if (!finalConfirmation) {
+                return;
+            }
+
+
+            try {
+
+                const response = await fetch(
+                    "/api/account/delete",
+                    {
+                        method: "DELETE"
+                    }
+                );
+
+                const data = await response.text();
+
+                if (!response.ok) {
+
+                    throw new Error(
+                        data || "Unable to delete account."
+                    );
+
+                }
+
+
+                alert(
+                    "Your account has been permanently deleted."
+                );
+
+
+                window.location.href = "/login.html";
+
+
+            } catch (error) {
+
+                console.error(error);
+
+                alert(
+                    error.message ||
+                    "Unable to delete account."
+                );
+
+            }
+
+        }
+
+    </script>
+
+
+    <!-- =========================================================
+         FINANCIAL ACTIVITY CHART
+         ========================================================= -->
+
+    <script>
+
+        let financialActivityChart = null;
+
+
+        function updateFinancialActivityChart() {
+
+            const tableBody =
+                document.getElementById(
+                    "monthlySummaryTableBody"
+                );
+
+            const canvas =
+                document.getElementById(
+                    "financialActivityChart"
+                );
+
+
+            if (!tableBody || !canvas) {
+                return;
+            }
+
+
+            const rows =
+                tableBody.querySelectorAll("tr");
+
+
+            const labels = [];
+            const credits = [];
+            const debits = [];
+
+
+            rows.forEach(row => {
+
+                const cells =
+                    row.querySelectorAll("td");
+
+
+                /*
+                 * A valid monthly summary row has:
+                 * Month
+                 * Total Credit
+                 * Total Debit
+                 * Closing Balance
+                 */
+
+                if (cells.length !== 4) {
+                    return;
+                }
+
+
+                const month =
+                    cells[0].textContent.trim();
+
+
+                const creditText =
+                    cells[1].textContent.trim();
+
+
+                const debitText =
+                    cells[2].textContent.trim();
+
+
+                /*
+                 * Ignore empty/no-data messages.
+                 */
+
+                if (
+                    !month ||
+                    month
+                        .toLowerCase()
+                        .includes("load dashboard") ||
+                    month
+                        .toLowerCase()
+                        .includes("no transactions")
+                ) {
+                    return;
+                }
+
+
+                const credit =
+                    parseFloat(
+                        creditText
+                            .replace(/[₹,\s]/g, "")
+                            .replace(/[^\d.-]/g, "")
+                    );
+
+
+                const debit =
+                    parseFloat(
+                        debitText
+                            .replace(/[₹,\s]/g, "")
+                            .replace(/[^\d.-]/g, "")
+                    );
+
+
+                if (
+                    Number.isNaN(credit) ||
+                    Number.isNaN(debit)
+                ) {
+                    return;
+                }
+
+
+                labels.push(month);
+
+                credits.push(credit);
+
+                debits.push(debit);
+
+            });
+
+
+            /*
+             * If there is no monthly data,
+             * don't create an empty chart.
+             */
+
+            if (labels.length === 0) {
+
+                if (financialActivityChart) {
+
+                    financialActivityChart.destroy();
+
+                    financialActivityChart = null;
+
+                }
+
+                return;
+
+            }
+
+
+            /*
+             * Destroy previous chart before
+             * creating a fresh one.
+             */
+
+            if (financialActivityChart) {
+
+                financialActivityChart.destroy();
+
+            }
+
+
+            financialActivityChart =
+                new Chart(canvas, {
+
+                    type: "bar",
+
+                    data: {
+
+                        labels: labels,
+
+                        datasets: [
+
+                            {
+
+                                label: "Credit",
+
+                                data: credits,
+
+                                backgroundColor:
+                                    "rgba(22, 163, 74, 0.75)",
+
+                                borderColor:
+                                    "rgba(22, 163, 74, 1)",
+
+                                borderWidth: 1,
+
+                                borderRadius: 6
+
+                            },
+
+
+                            {
+
+                                label: "Debit",
+
+                                data: debits,
+
+                                backgroundColor:
+                                    "rgba(220, 38, 38, 0.75)",
+
+                                borderColor:
+                                    "rgba(220, 38, 38, 1)",
+
+                                borderWidth: 1,
+
+                                borderRadius: 6
+
+                            }
+
+                        ]
+
+                    },
+
+
+                    options: {
+
+                        responsive: true,
+
+                        maintainAspectRatio: false,
+
+
+                        interaction: {
+
+                            mode: "index",
+
+                            intersect: false
+
+                        },
+
+
+                        plugins: {
+
+                            legend: {
+
+                                position: "top",
+
+                                align: "end",
+
+                                labels: {
+
+                                    usePointStyle: true,
+
+                                    pointStyle: "circle",
+
+                                    padding: 18,
+
+                                    font: {
+
+                                        size: 11
+
+                                    }
+
+                                }
+
+                            },
+
+
+                            tooltip: {
+
+                                callbacks: {
+
+                                    label: function (context) {
+
+                                        const value =
+                                            Number(
+                                                context.raw || 0
+                                            );
+
+
+                                        return (
+                                            context.dataset.label +
+                                            ": ₹" +
+                                            value.toLocaleString(
+                                                "en-IN",
+                                                {
+                                                    minimumFractionDigits: 2,
+                                                    maximumFractionDigits: 2
+                                                }
+                                            )
+                                        );
+
+                                    }
+
+                                }
+
+                            }
+
+                        },
+
+
+                        scales: {
+
+                            x: {
+
+                                grid: {
+
+                                    display: false
+
+                                },
+
+                                ticks: {
+
+                                    color: "#64748b",
+
+                                    font: {
+
+                                        size: 10
+
+                                    }
+
+                                }
+
+                            },
+
+
+                            y: {
+
+                                beginAtZero: true,
+
+                                grid: {
+
+                                    color: "#eef2f7"
+
+                                },
+
+                                ticks: {
+
+                                    color: "#64748b",
+
+                                    font: {
+
+                                        size: 10
+
+                                    },
+
+                                    callback: function (value) {
+
+                                        return "₹" +
+                                            Number(value)
+                                                .toLocaleString(
+                                                    "en-IN"
+                                                );
+
+                                    }
+
+                                }
+
+                            }
+
+                        }
+
+                    }
+
+                });
+
+        }
+
+
+        /*
+         * Watch the monthly summary table.
+         *
+         * Your existing app.js updates this table
+         * after Load Dashboard.
+         */
+
+        const monthlySummaryTableBody =
+            document.getElementById(
+                "monthlySummaryTableBody"
+            );
+
+
+        if (monthlySummaryTableBody) {
+
+            const chartObserver =
+                new MutationObserver(function () {
+
+                    updateFinancialActivityChart();
+
+                });
+
+
+            chartObserver.observe(
+                monthlySummaryTableBody,
+                {
+                    childList: true,
+                    subtree: true,
+                    characterData: true
+                }
+            );
+
+        }
+
+    </script>
+
+</body>
+
+</html>

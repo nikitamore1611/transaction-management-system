@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Account Recovery - Transaction Management System</title>
+
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+
+    <div class="container">
+
+        <h1>Account Recovery</h1>
+
+        <p>
+            Recover your inactive account using your registered mobile number.
+        </p>
+
+        <hr>
+
+        <!-- Mobile Number Section -->
+        <div id="mobileSection">
+
+            <h2>Enter Registered Mobile Number</h2>
+
+            <p>
+                An OTP will be sent to your registered mobile number.
+            </p>
+
+            <input
+                type="text"
+                id="mobile"
+                placeholder="Enter 10-digit mobile number"
+                maxlength="10"
+            >
+
+            <br><br>
+
+            <button
+                type="button"
+                onclick="sendOtp()">
+                Send OTP
+            </button>
+
+        </div>
+
+
+        <!-- OTP Section -->
+        <div
+            id="otpSection"
+            style="display: none;">
+
+            <h2>Verify OTP</h2>
+
+            <p>
+                Enter the 6-digit OTP.
+            </p>
+
+            <input
+                type="text"
+                id="otp"
+                placeholder="Enter 6-digit OTP"
+                maxlength="6"
+            >
+
+            <br><br>
+
+            <button
+                type="button"
+                onclick="verifyOtp()">
+                Verify OTP
+            </button>
+
+        </div>
+
+
+        <!-- Message -->
+        <p id="message"></p>
+
+
+        <br>
+
+        <a href="login.html">
+            Back to Login
+        </a>
+
+    </div>
+
+
+    <script>
+
+        let userMobile = "";
+
+
+        async function sendOtp() {
+
+            const mobile =
+                document.getElementById("mobile")
+                    .value
+                    .trim();
+
+            const message =
+                document.getElementById("message");
+
+
+            if (!mobile) {
+
+                message.textContent =
+                    "Please enter your mobile number.";
+
+                message.style.color = "#dc2626";
+
+                return;
+            }
+
+
+            if (!/^\d{10}$/.test(mobile)) {
+
+                message.textContent =
+                    "Please enter a valid 10-digit mobile number.";
+
+                message.style.color = "#dc2626";
+
+                return;
+            }
+
+
+            message.textContent =
+                "Sending OTP...";
+
+            message.style.color = "#64748b";
+
+
+            try {
+
+                const response = await fetch(
+                    `/api/account-recovery/send-otp?mobile=${encodeURIComponent(mobile)}`,
+                    {
+                        method: "POST"
+                    }
+                );
+
+
+                const data =
+                    await response.text();
+
+
+                if (!response.ok) {
+
+                    throw new Error(
+                        data || "Unable to send OTP."
+                    );
+                }
+
+
+                userMobile = mobile;
+
+
+                message.textContent = data;
+
+                message.style.color = "#15803d";
+
+
+                document.getElementById(
+                    "mobileSection"
+                ).style.display = "none";
+
+
+                document.getElementById(
+                    "otpSection"
+                ).style.display = "block";
+
+
+            } catch (error) {
+
+                message.textContent =
+                    error.message;
+
+                message.style.color = "#dc2626";
+            }
+        }
+
+
+        async function verifyOtp() {
+
+            const otp =
+                document.getElementById("otp")
+                    .value
+                    .trim();
+
+            const message =
+                document.getElementById("message");
+
+
+            if (!otp) {
+
+                message.textContent =
+                    "Please enter the OTP.";
+
+                message.style.color = "#dc2626";
+
+                return;
+            }
+
+
+            if (!/^\d{6}$/.test(otp)) {
+
+                message.textContent =
+                    "OTP must contain 6 digits.";
+
+                message.style.color = "#dc2626";
+
+                return;
+            }
+
+
+            message.textContent =
+                "Verifying OTP...";
+
+            message.style.color = "#64748b";
+
+
+            try {
+
+                const response = await fetch(
+                    `/api/account-recovery/verify-otp?mobile=${encodeURIComponent(userMobile)}&otp=${encodeURIComponent(otp)}`,
+                    {
+                        method: "POST"
+                    }
+                );
+
+
+                const data =
+                    await response.text();
+
+
+                if (!response.ok) {
+
+                    throw new Error(
+                        data || "OTP verification failed."
+                    );
+                }
+
+
+                message.textContent = data;
+
+                message.style.color = "#15803d";
+
+
+                setTimeout(function () {
+
+                    window.location.href =
+                        "login.html";
+
+                }, 1500);
+
+
+            } catch (error) {
+
+                message.textContent =
+                    error.message;
+
+                message.style.color = "#dc2626";
+            }
+        }
+
+    </script>
+
+</body>
+
+</html>
