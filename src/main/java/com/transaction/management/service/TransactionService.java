@@ -237,28 +237,75 @@ public class TransactionService {
         }
     }
 
-    private void calculateBalances(
-            User user,
-            List<Transaction> transactions) {
+private void calculateBalances(
+        User user,
+        List<Transaction> transactions) {
 
-        BigDecimal balance = user.getOpeningBalance();
+    BigDecimal balance = user.getOpeningBalance();
 
-        for (Transaction currentTransaction : transactions) {
+    int index = 0;
 
-            if (currentTransaction.getType() == TransactionType.CREDIT) {
-                balance = balance.add(currentTransaction.getAmount());
+    while (index < transactions.size()) {
 
-            } else if (currentTransaction.getType() == TransactionType.DEBIT) {
-                balance = balance.subtract(currentTransaction.getAmount());
-            }
+        LocalDate currentDate =
+                transactions.get(index).getTransactionDate();
 
-            if (balance.compareTo(BigDecimal.ZERO) < 0) {
-                throw new RuntimeException(
-                        "Transaction cannot be saved because balance cannot be negative"
+        BigDecimal dailyCredit = BigDecimal.ZERO;
+        BigDecimal dailyDebit = BigDecimal.ZERO;
+
+        int endIndex = index;
+
+        while (endIndex < transactions.size()
+                && transactions.get(endIndex)
+                .getTransactionDate()
+                .equals(currentDate)) {
+
+            Transaction currentTransaction =
+                    transactions.get(endIndex);
+
+            if (currentTransaction.getType()
+                    == TransactionType.CREDIT) {
+
+                dailyCredit = dailyCredit.add(
+                        currentTransaction.getAmount()
+                );
+
+            } else if (currentTransaction.getType()
+                    == TransactionType.DEBIT) {
+
+                dailyDebit = dailyDebit.add(
+                        currentTransaction.getAmount()
                 );
             }
 
-            currentTransaction.setBalance(balance);
+            endIndex++;
         }
+
+        BigDecimal dailyNetAmount =
+                dailyCredit.subtract(dailyDebit);
+
+        balance = balance.add(dailyNetAmount);
+
+        if (balance.compareTo(BigDecimal.ZERO) < 0) {
+            throw new RuntimeException(
+                    "Transactions cannot be saved because balance cannot be negative"
+            );
+        }
+
+        /*
+         * Rule #8:
+         * We do not know the order of transactions
+         * within the same date.
+         *
+         * Therefore, every transaction on this date
+         * receives the same date-closing balance.
+         */
+        for (int i = index; i < endIndex; i++) {
+
+            transactions.get(i).setBalance(balance);
+        }
+
+        index = endIndex;
     }
+}
 }
