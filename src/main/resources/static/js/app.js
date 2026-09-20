@@ -38,7 +38,9 @@ document.getElementById("seeAllTransactions").addEventListener("click", showAllT
 
 document
     .getElementById("applyFilters")
-    .addEventListener("click", loadDashboard);
+    .addEventListener("click", function () {
+        loadDashboard(false);
+    });
 
 document
     .getElementById("clearFilters")
@@ -399,6 +401,18 @@ async function loadDashboard(showAll = false) {
         displayMonthlySummary(
             data.monthlySummary
         );
+        if (
+    showAll ||
+    document.getElementById("searchReason").value.trim() ||
+    document.getElementById("filterType").value
+) {
+    document
+        .getElementById("transactionHistorySubtitle")
+        .scrollIntoView({
+            behavior: "smooth",
+            block: "center"
+        });
+}
 
 
     } catch (error) {
@@ -431,8 +445,7 @@ function clearFilters() {
     ).value = "NEWEST";
 
 
-    loadDashboard();
-
+    loadDashboard(false);
 }
 
 
