@@ -23,6 +23,8 @@ public class DashboardRequest {
 
     private String sortOrder;
 
+    private boolean showAll;
+
     public DashboardRequest() {
     }
 
@@ -88,5 +90,13 @@ public class DashboardRequest {
 
     public void setSortOrder(String sortOrder) {
         this.sortOrder = sortOrder;
+    }
+
+    public boolean isShowAll() {
+        return showAll;
+    }
+
+    public void setShowAll(boolean showAll) {
+        this.showAll = showAll;
     }
 }

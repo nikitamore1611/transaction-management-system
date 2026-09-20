@@ -34,6 +34,8 @@ document
     .getElementById("loadDashboard")
     .addEventListener("click", loadDashboard);
 
+document.getElementById("seeAllTransactions").addEventListener("click", showAllTransactions);
+
 document
     .getElementById("applyFilters")
     .addEventListener("click", loadDashboard);
@@ -246,14 +248,15 @@ async function addTransaction() {
     }
 
 }
-
+function showAllTransactions() {
+    loadDashboard(true);
+}
 
 // ==============================
 // Load Dashboard
 // ==============================
 
-async function loadDashboard() {
-
+async function loadDashboard(showAll = false) {
     const period =
         document.getElementById("period").value;
 
@@ -276,7 +279,8 @@ async function loadDashboard() {
         sortOrder:
             document
                 .getElementById("sortOrder")
-                .value
+                .value,
+        showAll: showAll
 
     };
 
@@ -376,11 +380,21 @@ async function loadDashboard() {
         ).textContent =
             data.recentTransactions.length;
 
-
         displayTransactions(
-            data.recentTransactions
+            showAll
+                ? data.recentTransactions
+                : data.recentTransactions.slice(0, 10)
         );
+        const seeAllButton = document.getElementById("seeAllTransactions");
+        const historySubtitle = document.getElementById("transactionHistorySubtitle");
 
+        if (showAll) {
+            seeAllButton.style.display = "none";
+            historySubtitle.textContent = "Showing all your transactions";
+        } else {
+            seeAllButton.style.display = "block";
+            historySubtitle.textContent = "Showing your latest 10 transactions";
+        }
 
         displayMonthlySummary(
             data.monthlySummary
